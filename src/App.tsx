@@ -4,8 +4,16 @@ import { Table, TableBody, TableCell, TableHeader, TableRow } from './components
 import { Dialog, DialogTrigger } from './components/ui/dialog'
 import { ProductsFilters } from './components/products-filters'
 import CreateProductDialog from './components/create-product-dialog'
+import { getProducts } from './data/products'
+import formatCurrency from './lib/formatCurrency'
+import { useQuery } from '@tanstack/react-query'
 
 export function App() {
+  const { data: products } = useQuery({
+    queryKey: ['products'], // Declare a global key to identify the request across the application.
+    queryFn: getProducts, // Function to fetch data
+  })
+
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-4">
       <h1 className="text-3xl font-bold">Products</h1>
@@ -34,12 +42,12 @@ export function App() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Array.from({ length: 5 }).map((_, i) => {
+            {products?.map((product) => {
               return (
-                <TableRow key={i}>
-                  <TableCell>{i + 1}</TableCell>
-                  <TableCell>Product {i + 1}</TableCell>
-                  <TableCell>$100.99</TableCell>
+                <TableRow key={product.id}>
+                  <TableCell>{product.id}</TableCell>
+                  <TableCell>{product.name}</TableCell>
+                  <TableCell>{formatCurrency(product.price)}</TableCell>
                 </TableRow>
               )
             })}
