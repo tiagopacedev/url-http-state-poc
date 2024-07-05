@@ -39,7 +39,7 @@ function CreateProductDialog() {
         return [
           ...data,
           {
-            id: Math.floor(Math.random() * 100),
+            id: String(Math.floor(Math.random() * 100)),
             name: variables.name,
             price: variables.price,
           },
